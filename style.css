@@ -1,7 +1,7 @@
 /* ---------- Theme tokens ---------- */
 :root {
   --bg: #0e0f1f;
-  --card: rgba(26, 28, 52, .72);
+  --card: rgba(26, 28, 52, .92);
   --border: rgba(255, 255, 255, .09);
   --text: #f1f0ff;
   --muted: #a3a3c7;
@@ -18,7 +18,7 @@
 }
 :root[data-theme="light"] {
   --bg: #f6f3ff;
-  --card: rgba(255, 255, 255, .78);
+  --card: rgba(255, 255, 255, .88);
   --border: rgba(60, 50, 140, .12);
   --text: #1b1a3a;
   --muted: #615f8c;
@@ -80,17 +80,14 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .stage {
   position: relative; z-index: 1; min-height: 100%;
   display: grid; place-items: center; padding: 32px 16px;
-  perspective: 1600px;
 }
 .card {
   width: min(420px, 100%);
   display: grid;                       /* both faces share one cell so height = tallest face */
-  transform-style: preserve-3d;
-  transition: transform .9s cubic-bezier(.65, .05, .25, 1);
-  animation: arrive .9s cubic-bezier(.2, .8, .2, 1) both;
+  perspective: 1600px;
+  animation: arrive .9s cubic-bezier(.2, .8, .2, 1) backwards;
 }
-.card.is-register { transform: rotateY(180deg); }
-@keyframes arrive { from { opacity: 0; transform: translateY(24px) rotateX(10deg); } }
+@keyframes arrive { from { opacity: 0; transform: translateY(24px); } }
 
 .face {
   grid-area: 1 / 1;
@@ -99,11 +96,13 @@ button { font: inherit; color: inherit; cursor: pointer; }
   border: 1px solid var(--border);
   border-radius: 28px;
   box-shadow: var(--shadow);
-  backdrop-filter: blur(22px); -webkit-backdrop-filter: blur(22px);
   backface-visibility: hidden; -webkit-backface-visibility: hidden;
-  transition: background .5s ease, border-color .5s ease;
+  transition: transform .9s cubic-bezier(.65, .05, .25, 1), visibility 0s linear .45s, background .5s ease, border-color .5s ease;
 }
-.back { transform: rotateY(180deg); }
+.front { transform: rotateY(0); visibility: visible; }
+.back  { transform: rotateY(180deg); visibility: hidden; }
+.card.is-register .front { transform: rotateY(-180deg); visibility: hidden; }
+.card.is-register .back  { transform: rotateY(0); visibility: visible; }
 
 h1 {
   font-family: "Bricolage Grotesque", sans-serif;
